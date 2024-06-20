@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TimeDate</string>
+    <string name="date">Pick Date</string>
+    <string name="time">Pick Time</string>
+</resources>
