@@ -14,12 +14,6 @@ import com.anand.timedate.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-private operator fun IntRange.invoke(value: () -> Unit) {
-
-}
-
-
-
 class MainActivity : AppCompatActivity() {
     var binding:ActivityMainBinding? = null
    private var simpleDateFormat = SimpleDateFormat("dd MMM,yyyy", Locale.US)
@@ -35,44 +29,38 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding?.date?.setOnClickListener {
+        binding?.btndate?.setOnClickListener {
             val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(this, { _, year, month, dayOfMonth ->
+
                 val selecteddate = Calendar.getInstance()
                 selecteddate.set(Calendar.YEAR, year)
                 selecteddate.set(Calendar.MONTH, month)
                 selecteddate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                val pickedDate = simpleDateFormat.format(selecteddate.time)
-                var currentDate = (now.get(Calendar.YEAR);now.get(Calendar.MONTH);now.get(Calendar.DAY_OF_MONTH))
-                if(pickedDate in ((currentDate.plus(10))..(currentDate.minus(10))){
-                        binding?.time?.setText(pickedDate)
-                } else{
-                    Toast.makeText(this,"invalid date",Toast.LENGTH_LONG).show()
-
-                }
             },
 
             now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
+            val calendar=Calendar.getInstance()
+            calendar.add(Calendar.DATE,-10)
+            datePicker.datePicker.minDate = calendar.timeInMillis
+            calendar.add(Calendar.DATE,20)
+            datePicker.datePicker.maxDate = calendar.timeInMillis
             datePicker.show()
 
-
         }
-        binding?.time?.setOnClickListener {
+        binding?.btntime?.setOnClickListener {
             val calendar = Calendar.getInstance()
             val timePicker = TimePickerDialog(this, { _, hourOfDay, minute ->
                 val selectedTime = Calendar.getInstance()
-                var hour = selectedTime.get(Calendar.HOUR_OF_DAY,hourOfDay)
-                selectedTime.get(Calendar.MINUTE,minute)
-                val pickedTime = simpleTimeFormat.format(selectedTime.time)
-                if(hour in 9..6){
-                    binding?.time?.text = pickedTime
-                }else{
-                    Toast.makeText(this,"hour Constraint is from 9 to 6",Toast.LENGTH_LONG).show()
-                }
-
-
+                var hour = selectedTime.set(Calendar.HOUR_OF_DAY,hourOfDay)
+                var minute = selectedTime.set(Calendar.MINUTE,minute)
+                var calendar = Calendar.getInstance()
+                calendar.set(Calendar.HOUR_OF_DAY,9)
+                calendar.set(Calendar.HOUR_OF_DAY,6)
+                binding?.btntime?.setText(simpleTimeFormat.format(selectedTime))
             },
                 calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false)
+
             timePicker.show()
         }
 
